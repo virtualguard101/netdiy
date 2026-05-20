@@ -1,5 +1,5 @@
 bootstrap:
-    cmake -B build
+    cmake -S . -B build
     ln -sf build/compile_commands.json compile_commands.json
 
 format:

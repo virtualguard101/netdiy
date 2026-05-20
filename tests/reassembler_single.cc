@@ -1,90 +1,89 @@
-#include "byte_stream_test_harness.hh"
-#include "reassembler_test_harness.hh"
-
 #include <exception>
 #include <iostream>
 
+#include "byte_stream_test_harness.hh"
+#include "reassembler_test_harness.hh"
+
 using namespace std;
 
-int main()
-{
+int main() {
   try {
     {
-      ReassemblerTestHarness test { "construction", 65000 };
+      ReassemblerTestHarness test{"construction", 65000};
 
-      test.execute( BytesPushed( 0 ) );
-      test.execute( IsFinished { false } );
+      test.execute(BytesPushed(0));
+      test.execute(IsFinished{false});
     }
 
     {
-      ReassemblerTestHarness test { "insert a @ 0", 65000 };
+      ReassemblerTestHarness test{"insert a @ 0", 65000};
 
-      test.execute( Insert { "a", 0 } );
+      test.execute(Insert{"a", 0});
 
-      test.execute( BytesPushed( 1 ) );
-      test.execute( ReadAll( "a" ) );
-      test.execute( IsFinished { false } );
+      test.execute(BytesPushed(1));
+      test.execute(ReadAll("a"));
+      test.execute(IsFinished{false});
     }
 
     {
-      ReassemblerTestHarness test { "insert a @ 0 [last]", 65000 };
+      ReassemblerTestHarness test{"insert a @ 0 [last]", 65000};
 
-      test.execute( Insert { "a", 0 }.is_last() );
+      test.execute(Insert{"a", 0}.is_last());
 
-      test.execute( BytesPushed( 1 ) );
-      test.execute( ReadAll( "a" ) );
-      test.execute( IsFinished { true } );
+      test.execute(BytesPushed(1));
+      test.execute(ReadAll("a"));
+      test.execute(IsFinished{true});
     }
 
     {
-      ReassemblerTestHarness test { "empty stream", 65000 };
+      ReassemblerTestHarness test{"empty stream", 65000};
 
-      test.execute( Insert { "", 0 }.is_last() );
+      test.execute(Insert{"", 0}.is_last());
 
-      test.execute( BytesPushed( 0 ) );
-      test.execute( IsFinished { true } );
+      test.execute(BytesPushed(0));
+      test.execute(IsFinished{true});
     }
 
     {
-      ReassemblerTestHarness test { "insert b @ 0 [last]", 65000 };
+      ReassemblerTestHarness test{"insert b @ 0 [last]", 65000};
 
-      test.execute( Insert { "b", 0 }.is_last() );
+      test.execute(Insert{"b", 0}.is_last());
 
-      test.execute( BytesPushed( 1 ) );
-      test.execute( ReadAll( "b" ) );
-      test.execute( IsFinished { true } );
+      test.execute(BytesPushed(1));
+      test.execute(ReadAll("b"));
+      test.execute(IsFinished{true});
     }
 
     {
-      ReassemblerTestHarness test { "insert empty string @ 0", 65000 };
+      ReassemblerTestHarness test{"insert empty string @ 0", 65000};
 
-      test.execute( Insert { "", 0 } );
+      test.execute(Insert{"", 0});
 
-      test.execute( BytesPushed( 0 ) );
-      test.execute( IsFinished { false } );
+      test.execute(BytesPushed(0));
+      test.execute(IsFinished{false});
     }
 
     // credit: Joshua Dong
     {
-      ReassemblerTestHarness test { "insert a after 'first unacceptable'", 1 };
+      ReassemblerTestHarness test{"insert a after 'first unacceptable'", 1};
 
-      test.execute( Insert { "g", 3 } );
+      test.execute(Insert{"g", 3});
 
-      test.execute( BytesPushed( 0 ) );
-      test.execute( IsFinished { false } );
+      test.execute(BytesPushed(0));
+      test.execute(IsFinished{false});
     }
 
     {
-      ReassemblerTestHarness test { "insert b before 'first unassembled'", 1 };
+      ReassemblerTestHarness test{"insert b before 'first unassembled'", 1};
 
-      test.execute( Insert { "b", 0 } );
-      test.execute( ReadAll( "b" ) );
-      test.execute( BytesPushed( 1 ) );
-      test.execute( Insert { "b", 0 } );
-      test.execute( BytesPushed( 1 ) );
-      test.execute( IsFinished { false } );
+      test.execute(Insert{"b", 0});
+      test.execute(ReadAll("b"));
+      test.execute(BytesPushed(1));
+      test.execute(Insert{"b", 0});
+      test.execute(BytesPushed(1));
+      test.execute(IsFinished{false});
     }
-  } catch ( const exception& e ) {
+  } catch (const exception& e) {
     cerr << "Exception: " << e.what() << "\n";
     return EXIT_FAILURE;
   }
