@@ -8,8 +8,8 @@ format:
     rg --files util -g '*.{hh,cc}' -0 | xargs -0 clang-format -i
     rg --files tests -g '*.{hh,cc}' -0 | xargs -0 clang-format -i
 
-run target:
+proxy target:
     proxychains4 -q {{ target }}
 
 test target:
-    proxychains4 -q cmake --build build -t {{ target }}
+    cmake --build build -t {{ target }}

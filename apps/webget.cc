@@ -12,7 +12,8 @@ void get_URL(const string& host, const string& path) {
   // Establish a connection to the server with the given host and service
   // name/port
   socket.connect(Address(host, "http"));
-  socket.write("GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\n\r\n");
+  socket.write("GET " + path + " HTTP/1.1\r\nHost: " + host +
+               "\r\nConnection: close\r\n\r\n");
   // Close the write side of the socket
   socket.shutdown(SHUT_WR);
   while (!socket.eof()) {
